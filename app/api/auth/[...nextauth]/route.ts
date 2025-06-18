@@ -3,6 +3,13 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs"; // use bcryptjs for Next.js compatibility
 import { prisma } from "@/lib/db";
 
+type ExtendedUser = {
+  id: string;
+  email: string;
+  role: string;
+  username: string;
+};
+
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
@@ -37,9 +44,10 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
-        token.username = (user as any).username;
+        const u = user as ExtendedUser;
+        token.id = u.id;
+        token.role = u.role;
+        token.username = u.username;
       }
       return token;
     },

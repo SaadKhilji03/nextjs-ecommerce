@@ -12,6 +12,15 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner";
 
+type CartItem = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string; // Optional image field
+};
+
+
 export default function CartPage() {
   const { data: session, status } = useSession();
   const { cart, addToCart, removeFromCart } = useCart();
@@ -33,7 +42,7 @@ export default function CartPage() {
     }
   };
 
-  const handleAdd = (item: any) => {
+  const handleAdd = (item: CartItem) => {
     addToCart(item);
     toast.success("Added to cart", {
       description: `${item.name} ×1`,

@@ -1,11 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import Image from "next/image";
 
 type Product = {
   id?: string;
@@ -23,7 +24,7 @@ export function ProductForm({
   onSuccess: () => void;
 }) {
   const [form, setForm] = useState<Product>(
-    product || { name: '', price: 0, image: '', description: '' }
+    product || { name: "", price: 0, image: "", description: "" }
   );
 
   useEffect(() => {
@@ -36,34 +37,37 @@ export function ProductForm({
     const { name, value } = e.target;
     setForm({
       ...form,
-      [name]: name === 'price' ? (value === '' ? 0 : parseFloat(value)) : value,
+      [name]: name === "price" ? (value === "" ? 0 : parseFloat(value)) : value,
     });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const method = product?.id ? 'PUT' : 'POST';
-    const url = product?.id ? `/api/products/${product.id}` : '/api/products';
+    const method = product?.id ? "PUT" : "POST";
+    const url = product?.id ? `/api/products/${product.id}` : "/api/products";
 
     const res = await fetch(url, {
       method,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
 
     if (!res.ok) {
       const error = await res.json();
-      toast.error('Failed: ' + (error.message || res.status));
+      toast.error("Failed: " + (error.message || res.status));
       return;
     }
 
-    toast.success(`Product ${product?.id ? 'updated' : 'created'}`);
-    setForm({ name: '', price: 0, image: '', description: '' });
+    toast.success(`Product ${product?.id ? "updated" : "created"}`);
+    setForm({ name: "", price: 0, image: "", description: "" });
     onSuccess();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg border shadow">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 bg-white p-6 rounded-lg border shadow"
+    >
       <div className="space-y-2">
         <Label htmlFor="name">Product Name</Label>
         <Input
@@ -97,11 +101,14 @@ export function ProductForm({
           required
         />
         {form.image && (
-          <img
-            src={form.image}
-            alt="Preview"
-            className="w-32 h-32 object-cover mt-2 border rounded"
-          />
+          <div className="relative w-32 h-32 mt-2 border rounded overflow-hidden">
+            <Image
+              src={form.image}
+              alt="Preview"
+              fill
+              className="object-cover rounded"
+            />
+          </div>
         )}
       </div>
 
@@ -117,7 +124,7 @@ export function ProductForm({
       </div>
 
       <Button type="submit">
-        {product?.id ? 'Update Product' : 'Create Product'}
+        {product?.id ? "Update Product" : "Create Product"}
       </Button>
     </form>
   );

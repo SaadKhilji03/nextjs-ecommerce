@@ -6,7 +6,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
-import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
+import Image from 'next/image';
 
 type Product = {
   id: string;
@@ -80,16 +87,22 @@ export default function AdminProductList() {
 
         <div className="space-y-4">
           {paginated.map((product) => (
-            <Card key={product.id} className="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <Card
+              key={product.id}
+              className="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4"
+            >
               <CardContent className="flex flex-col md:flex-row items-start gap-4 p-0">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-24 h-24 object-cover rounded border"
-                />
+                <div className="relative w-24 h-24 rounded border overflow-hidden">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover rounded"
+                  />
+                </div>
                 <div>
                   <h3 className="text-lg font-bold">{product.name}</h3>
-                  <p className="text-gray-600">${product.price}</p>
+                  <p className="text-gray-400">${product.price}</p>
                 </div>
               </CardContent>
               <div className="flex gap-2">
@@ -114,13 +127,17 @@ export default function AdminProductList() {
           <Pagination className="mt-6">
             <PaginationContent>
               <PaginationItem>
-                <PaginationPrevious onClick={() => setPage((p) => Math.max(p - 1, 1))} />
+                <PaginationPrevious
+                  onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                />
               </PaginationItem>
               <PaginationItem>
                 Page {page} of {pageCount}
               </PaginationItem>
               <PaginationItem>
-                <PaginationNext onClick={() => setPage((p) => Math.min(p + 1, pageCount))} />
+                <PaginationNext
+                  onClick={() => setPage((p) => Math.min(p + 1, pageCount))}
+                />
               </PaginationItem>
             </PaginationContent>
           </Pagination>
