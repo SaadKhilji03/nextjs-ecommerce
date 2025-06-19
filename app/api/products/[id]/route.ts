@@ -4,11 +4,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
 // GET product by ID
-export async function GET(
-  req: NextRequest,
-  context: { params: Record<string, string> }
-) {
-  const { id } = context.params;
+export async function GET(req: NextRequest, { params }: any) {
+  const id = params.id;
 
   try {
     const product = await prisma.product.findUnique({
@@ -27,14 +24,10 @@ export async function GET(
 }
 
 // PUT (update product)
-export async function PUT(
-  req: NextRequest,
-  context: { params: Record<string, string> }
-) {
-  const { id } = context.params;
+export async function PUT(req: NextRequest, { params }: any) {
+  const id = params.id;
 
   const session = await getServerSession(authOptions);
-
   if (!session || session.user.role !== "admin") {
     return new NextResponse("Unauthorized", { status: 401 });
   }
@@ -56,14 +49,10 @@ export async function PUT(
 }
 
 // DELETE product
-export async function DELETE(
-  req: NextRequest,
-  context: { params: Record<string, string> }
-) {
-  const { id } = context.params;
+export async function DELETE(req: NextRequest, { params }: any) {
+  const id = params.id;
 
   const session = await getServerSession(authOptions);
-
   if (!session || session.user.role !== "admin") {
     return new NextResponse("Unauthorized", { status: 401 });
   }
