@@ -3,8 +3,10 @@ import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
+type Params = { params: { id: string } };
+
 // GET product by ID
-export async function GET(req: NextRequest, { params }: any) {
+export async function GET(req: NextRequest, { params }: Params) {
   const id = params.id;
 
   try {
@@ -24,7 +26,7 @@ export async function GET(req: NextRequest, { params }: any) {
 }
 
 // PUT (update product)
-export async function PUT(req: NextRequest, { params }: any) {
+export async function PUT(req: NextRequest, { params }: Params) {
   const id = params.id;
 
   const session = await getServerSession(authOptions);
@@ -49,7 +51,7 @@ export async function PUT(req: NextRequest, { params }: any) {
 }
 
 // DELETE product
-export async function DELETE(req: NextRequest, { params }: any) {
+export async function DELETE(req: NextRequest, { params }: Params) {
   const id = params.id;
 
   const session = await getServerSession(authOptions);
