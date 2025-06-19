@@ -3,10 +3,10 @@ import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-// ✅ GET product by ID
+// GET product by ID
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Record<string, string> }
 ) {
   const { id } = context.params;
 
@@ -26,14 +26,15 @@ export async function GET(
   }
 }
 
-// ✅ PUT (update product)
+// PUT (update product)
 export async function PUT(
   req: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Record<string, string> }
 ) {
   const { id } = context.params;
 
   const session = await getServerSession(authOptions);
+
   if (!session || session.user.role !== "admin") {
     return new NextResponse("Unauthorized", { status: 401 });
   }
@@ -54,14 +55,15 @@ export async function PUT(
   }
 }
 
-// ✅ DELETE product
+// DELETE product
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Record<string, string> }
 ) {
   const { id } = context.params;
 
   const session = await getServerSession(authOptions);
+
   if (!session || session.user.role !== "admin") {
     return new NextResponse("Unauthorized", { status: 401 });
   }
