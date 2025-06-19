@@ -5,9 +5,9 @@ import AddToCartButton from "@/components/AddToCartButton";
 export default async function ProductDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const id = params.id;
+  const { id } = await params;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${id}`,
     { cache: "no-store" }

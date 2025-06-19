@@ -30,7 +30,7 @@ export const authOptions: AuthOptions = {
         return {
           id: user.id,
           email: user.email,
-          name: user.name ?? undefined,
+          username: user.username,
           role: user.role, // 👈 Include role for admin checks
         };
       },
