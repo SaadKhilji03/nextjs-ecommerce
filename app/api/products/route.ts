@@ -1,6 +1,8 @@
 // app/api/products/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function GET() {
   try {
@@ -16,6 +18,11 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session || session.user.role !== "admin") {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    
     const body = await req.json();
     const { name, price, image, description } = body;
 

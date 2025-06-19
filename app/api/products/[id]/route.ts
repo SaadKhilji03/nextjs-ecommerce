@@ -3,14 +3,16 @@ import { prisma } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-// GET product by ID (already exists)
+// ✅ GET product by ID
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
+  const { id } = context.params;
+
   try {
     const product = await prisma.product.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!product) {
@@ -27,10 +29,11 @@ export async function GET(
 // ✅ PUT (update product)
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  const session = await getServerSession(authOptions);
+  const { id } = context.params;
 
+  const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "admin") {
     return new NextResponse("Unauthorized", { status: 401 });
   }
@@ -40,7 +43,7 @@ export async function PUT(
 
   try {
     const updated = await prisma.product.update({
-      where: { id: params.id },
+      where: { id },
       data: { name, price, image },
     });
 
@@ -54,17 +57,18 @@ export async function PUT(
 // ✅ DELETE product
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  const session = await getServerSession(authOptions);
+  const { id } = context.params;
 
+  const session = await getServerSession(authOptions);
   if (!session || session.user.role !== "admin") {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
   try {
     await prisma.product.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return new NextResponse("Product deleted", { status: 200 });
